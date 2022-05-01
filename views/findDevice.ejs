@@ -1,0 +1,193 @@
+<%- include('header'); -%> <%- include('newPassword'); -%>
+
+<div class="container">
+    <label>Jesteś zalogowany jako: <%= user.first %> <%= user.last %> </label> <br />
+    <label> Na stanowisku: <%= user.position %></label><br />
+    <br />
+
+    <div class="container">
+        <% if(user.position == "admin"||user.position == "technician"||user.position == "warehouse"){ %>
+        <ul class="nav nav-tabs">
+            <% if(user.position == "admin"||user.position == "technician"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/findDevice">Urzadzenie:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addDevices">Urządzenia:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addItems">Komponenty:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "quality") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/quality">Kontrola Jakości:</a>
+            </li>
+            <%}%> <% if(user.position == "admin") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addWorkers">Pracownicy:</a>
+            </li>
+            <%}%>
+        </ul>
+
+        <div class="row">
+            <label>Zarzadanie Urządzeniem:</label><br />
+            <br />
+
+            <div class="col-sm">
+                <tr>
+                    <label>Wprowadz numer seryjny:</label>
+                    <form action="/findDevice" method="post" class="/findDevice">
+                        <input type="text" class="form-control" name="sn" placeholder="Serial number" />
+                        <button class="btn btn-outline-primary" hidden="hidden" value="Submit">Wyszukaj</button>
+                    </form>
+                </tr>
+
+                <% if(typeof showDevice !== 'undefined' ){ %>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><label>Dane:</label></li>
+                    <li class="list-group-item">Numer seryjny: <%= showDevice[0].sn %></li>
+                    <li class="list-group-item">Typ: <%= showDevice[0].type%></li>
+                    <li class="list-group-item">Status: <%= showDevice[0].status %></li>
+
+                    <div class="form-group">
+                        <br />
+                        <label>Opis usterki:</label>
+                        <textarea class="form-control" rows="3"><%= showDevice[0].description  %>  </textarea>
+                    </div>
+                </ul>
+
+                <% } else{ %>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><label>Dane: </label></li>
+                    <li class="list-group-item">Numer seryjny: -</li>
+                    <li class="list-group-item">Typ: -</li>
+                    <li class="list-group-item">Status: -</li>
+
+                    <div class="form-group">
+                        <br />
+                        <label>Opis usterki:</label>
+                        <textarea class="form-control" rows="3"> -  </textarea>
+                    </div>
+                </ul>
+
+                <% } %>
+            </div>
+            <div class="col-sm">
+                <% if(typeof showDevice !== 'undefined'){ %>
+
+                <form action="/status" method="post" class="changeStatus">
+                    <label>Zmień status:</label>
+                    <select name="status" class="form-control">
+                        <% if(showDevice[0].status =="NOWY"&& user.position == "warehouse"||showDevice[0].status =="ZAMÓWIENIE" && user.position == "warehouse" || user.position == "admin") { %>
+                        <option>NAPRAWA</option>
+                        <% } %> <% if(showDevice[0].status =="NAPRAWA"&& user.position == "technician" || user.position == "admin") { %>
+                        <option>ZAMÓWIENIE</option>
+                        <% } %> <% if(showDevice[0].status =="NAPRAWA"&& user.position == "technician" || user.position == "admin") { %>
+                        <option>USZKODZONE</option>
+                        <% } %> <% if(showDevice[0].status =="NAPRAWA"&& user.position == "technician" || user.position == "admin") { %>
+                        <option>TEST</option>
+                        <% } %> <% if(showDevice[0].status =="TEST"&& user.position == "quality" || user.position == "admin") { %>
+                        <option>UKOŃCZONE</option>
+                        <% } %>
+                    </select>
+
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="text-right">
+                        <button class="btn btn-outline-primary text-right" value="Submit">zmień</button>
+                    </div>
+                </form>
+
+                <% } %>
+
+                <br />
+            </div>
+
+            <div class="container" id="section2">
+                <% if(typeof showDevice !== 'undefined'){ %>
+                <label>Dodaj komponent do Urzadzenia:</label><br />
+                <br />
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Urządzenie</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Kompatybilny do urzadzenia</th>
+                            <th scope="col">Wymagana ilość</th>
+
+                            <th scope="col">akcja</th>
+                        </tr>
+
+                        <tr>
+                            <form action="/addItemtoDevice" method="post" class="addItemtoDevice">
+                                <th scope="row">-</th>
+                                <td>
+                                    <select name="sn" class="form-control">
+                                        <option><%= showDevice[0].sn %></option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <select name="name" class="form-control">
+                                        <option>NazwaKomponentu1</option>
+                                        <option>NazwaKomponentu2</option>
+                                        <option>NazwaKomponentu3</option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <select name="type" class="form-control">
+                                        <option><%= showDevice[0].type %></option>
+                                    </select>
+                                </td>
+
+                                <td><input type="text" class="form-control" name="quantity" placeholder="Ilość" /></td>
+
+                                <td><button class="btn btn-outline-primary" value="Submit">Dodaj</button></td>
+                            </form>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% addItemlisToDevice.forEach(function (item) { %>
+                        <tr>
+                            <%if (showDevice[0].sn == item.sn) {%>
+                            <form action="/issueItem" method="post" class="issueItem">
+                                <td><%= item.id %></td>
+                                <td><%= item.sn %></td>
+                                <td><%= item.name %></td>
+                                <td><%= item.type %></td>
+                                <td><%= item.quantity %></td>
+                                <td>
+                                    <input type="text" class="form-control" hidden="hidden" name="itemid" value="<%= item.id %>" />
+
+                                    <% if(user.position == "admin" && item.status=="NIE WYDANO"||user.position == "warehouse" && item.status=="NIE WYDANO"){ %>
+                                    <button class="btn btn-outline-primary" value="submit">Wydaj</button>
+                                    <% } else{ %> <%=item.status%> <% } %>
+                                </td>
+                            </form>
+                        </tr>
+                        <%}%> <% }) %> <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <% } else{ %>
+    <label> Brak uprawnień</label>
+    <% } %>
+</div>

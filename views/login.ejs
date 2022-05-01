@@ -1,0 +1,27 @@
+<%- include('header'); -%>
+
+<div class="row">
+    <div class="col-sm"></div>
+    <div class="col-sm-2">
+        <div class="container">
+            <div class="text-center">
+                <h1>Logowanie</h1>
+                <br />
+            </div>
+            <form action="" method="POST">
+                <label for="user_login">Login</label>
+                <input type="text" class="input" name="_login" autocomplete="off" placeholder="imie.nazwisko" />
+
+                <label for="user_password">Hasło</label>
+                <input type="password" class="input" name="_password" placeholder="hasło" />
+
+                <% if(typeof error !== 'undefined'){ %>
+                <div class="err-msg"><%= error %></div>
+                <% } %>
+
+                <input type="submit" value="Zaloguj" />
+            </form>
+        </div>
+    </div>
+    <div class="col-sm"></div>
+</div>

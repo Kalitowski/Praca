@@ -1,0 +1,90 @@
+<%- include('header'); -%> <%- include('newPassword'); -%>
+<div class="container">
+    <label>Jesteś zalogowany jako: <%= user.first %> <%= user.last %> </label>
+    <br />
+    <label> Na stanowisku: <%= user.position %></label><br />
+    <br />
+
+    <div class="container">
+        <% if(user.position == "admin"){ %>
+        <ul class="nav nav-tabs">
+            <% if(user.position == "admin"||user.position == "technician"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/findDevice">Urzadzenie:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addDevices">Urządzenia:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addItems">Komponenty:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "quality") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/quality">Kontrola Jakości:</a>
+            </li>
+            <%}%> <% if(user.position == "admin") {%>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/addWorkers">Pracownicy:</a>
+            </li>
+            <%}%>
+        </ul>
+
+        <table class="table" id="table">
+            <label>Zarzadanie Personelem:</label>
+            <br />
+            <br />
+
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Imię</th>
+                <th scope="col">Nazwisko</th>
+                <th scope="col">Stanowisko</th>
+                <th scope="col">Akcja</th>
+            </tr>
+
+            <tr>
+                <form action="/addWorker" method="post" class="addworker">
+                    <th scope="row">-</th>
+                    <td>
+                        <input type="text" class="form-control" name="first" placeholder="Imie" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="last" placeholder="Nazwisko" />
+                    </td>
+                    <td>
+                        <select name="position" class="form-control">
+                            <option>technician</option>
+                            <option>warehouse</option>
+                            <option>quality</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-outline-primary" value="Submit">
+                            Dodaj
+                        </button>
+                    </td>
+                </form>
+            </tr>
+            <tbody>
+                <% workers.forEach(function (user) { %>
+                <tr>
+                    <%if (user.position !="admin") {%>
+                    <td><%= user.id %></td>
+                    <td><%= user.first %></td>
+                    <td><%= user.last %></td>
+                    <td><%= user.position %></td>
+                    <td>
+                        <a class="btn btn-outline-danger" href="/deleteWorker/<%=user.id%>" role="button">Usuń</a>
+                    </td>
+                </tr>
+                <%}%> <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <% } else{ %>
+    <label> Brak uprawnień</label>
+    <% } %>
+</div>

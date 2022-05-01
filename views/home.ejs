@@ -1,0 +1,32 @@
+<%- include('header'); -%> <%- include('newPassword'); -%>
+<div class="container">
+    <label>Jesteś zalogowany jako: <%= user.first %> <%= user.last %> </label> <br />
+    <label> Na stanowisku: <%= user.position %></label><br />
+    <br />
+
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <% if(user.position == "admin"||user.position == "technician"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/findDevice">Urzadzenie:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addDevices">Urządzenia:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addItems">Komponenty:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "quality") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/quality">Kontrola Jakości:</a>
+            </li>
+            <%}%> <% if(user.position == "admin") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addWorkers">Pracownicy:</a>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>

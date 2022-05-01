@@ -1,0 +1,131 @@
+<%- include('header'); -%> <%- include('newPassword'); -%>
+<div class="container">
+    <label>Jesteś zalogowany jako: <%= user.first %> <%= user.last %> </label> <br />
+    <label> Na stanowisku: <%= user.position %></label><br />
+    <br />
+    <div class="container">
+        <% if(user.position == "admin"||user.position == "quality"){ %>
+        <ul class="nav nav-tabs">
+            <% if(user.position == "admin"||user.position == "technician"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/findDevice">Urzadzenie:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addDevices">Urządzenia:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addItems">Komponenty:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "quality") {%>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/quality">Kontrola Jakości:</a>
+            </li>
+            <%}%> <% if(user.position == "admin") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addWorkers">Pracownicy:</a>
+            </li>
+            <%}%>
+        </ul>
+
+        <div class="row">
+            <label>Panel kontorli Jakości:</label>
+            <br />
+            <br />
+            <tr>
+                <div class="col">
+                    <div class="col-sm">
+                        <tr>
+                            <label>Wprowadz numer seryjny:</label>
+                            <form action="/showDeviceforQuality" method="post" class="showDeviceforQuality">
+                                <input type="text" class="form-control" name="sn" placeholder="Serial number" />
+                                <button class="btn btn-outline-primary" hidden="hidden" value="Submit">Wyszukaj</button>
+                            </form>
+                        </tr>
+
+                        <% if(typeof showDeviceforQuality !== 'undefined'){ %>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><label>Dane:</label></li>
+                            <li class="list-group-item">Numer seryjny: <%= showDeviceforQuality[0].sn %></li>
+                            <li class="list-group-item">Typ: <%= showDeviceforQuality[0].type %></li>
+                            <li class="list-group-item">Status: <%= showDeviceforQuality[0].status %></li>
+
+                            <div class="form-group">
+                                <br />
+                                <label>Opis usterki:</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"> <%= showDeviceforQuality[0].descripiton%>   </textarea>
+                            </div>
+                        </ul>
+
+                        <% } else{ %>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><label>Dane: </label></li>
+                            <li class="list-group-item">Numer seryjny: -</li>
+                            <li class="list-group-item">Typ: -</li>
+                            <li class="list-group-item">Status: -</li>
+
+                            <div class="form-group">
+                                <br />
+                                <label>Opis usterki:</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"> -  </textarea>
+                            </div>
+                        </ul>
+
+                        <% } %>
+                    </div>
+                </div>
+                <div class="col">
+                    <% if(typeof showDeviceforQuality !== 'undefined'){ %>
+
+                    <form action="/statusforQuality" method="post" class="statusforQuality">
+                        <label>Zmień status:</label>
+                        <select name="status" class="form-control">
+                            <% if(showDeviceforQuality[0].status =="TEST"&& user.position == "quality" || user.position == "admin") { %>
+                            <option>UKOŃCZONE</option>
+                            <% } %>
+                        </select>
+
+                        <br />
+                        <label>Testy:</label><br />
+                        (Gdy wszystkie testy nie zostana przeprowadzane zmiana statusu będzie niemożliwa)
+                        <br />
+                        <br />
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div>
+                                    Czy wykonano TEST 1 ?
+                                    <input type="checkbox" name="test1" />
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div>
+                                    Czy wykonano TEST 2 ?
+                                    <input type="checkbox" name="test2" />
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div>
+                                    Czy wykonano TEST 3 ?
+                                    <input type="checkbox" name="test3" />
+                                </div>
+                            </li>
+                        </ul>
+
+                        <br />
+                        <div class="text-right">
+                            <button class="btn btn-outline-primary text-right" value="Submit">zmień</button>
+                        </div>
+                    </form>
+                    <% } %>
+                </div>
+            </tr>
+        </div>
+    </div>
+    <% } else{ %>
+    <label> Brak uprawnień</label>
+    <% } %>
+</div>

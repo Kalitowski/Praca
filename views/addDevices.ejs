@@ -1,0 +1,85 @@
+<%- include('header'); -%> <%- include('newPassword'); -%>
+
+<div class="container">
+    <label>Jesteś zalogowany jako: <%= user.first %> <%= user.last %> </label> <br />
+    <label> Na stanowisku: <%= user.position %></label><br />
+    <br />
+
+    <div class="container">
+        <% if(user.position == "admin"||user.position == "warehouse"){ %>
+        <ul class="nav nav-tabs">
+            <% if(user.position == "admin"||user.position == "technician"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/findDevice">Urzadzenie:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/addDevices">Urządzenia:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "warehouse") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addItems">Komponenty:</a>
+            </li>
+            <%}%> <% if(user.position == "admin"||user.position == "quality") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/quality">Kontrola Jakości:</a>
+            </li>
+            <%}%> <% if(user.position == "admin") {%>
+            <li class="nav-item">
+                <a class="nav-link" href="/addWorkers">Pracownicy:</a>
+            </li>
+            <%}%>
+        </ul>
+
+        <label>Zarzadanie Urządzeniami:</label><br />
+        <br />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Numer seryjny</th>
+                    <th scope="col">Typ urzadzenia</th>
+                    <th scope="col">Opis usterki</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Akcja</th>
+                </tr>
+
+                <tr>
+                    <form action="/addDevice" method="post" class="addDevice">
+                        <th scope="row">-</th>
+                        <td><input type="text" class="form-control" name="sn" placeholder="Serial number" /></td>
+                        <td>
+                            <select name="type" class="form-control">
+                                <option>TypUrzadzenia1</option>
+                                <option>TypUrzadzenia2</option>
+                                <option>TypUrzadzenia3</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control" name="description" placeholder="Opis usterki" /></td>
+
+                        <td>NOWY</td>
+
+                        <td><button class="btn btn-outline-primary" value="Submit">Dodaj</button></td>
+                    </form>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% devices.forEach(function (user) { %>
+                <tr>
+                    <td><%= user.id %></td>
+                    <td><%= user.sn %></td>
+                    <td><%= user.type %></td>
+                    <td><%= user.description %></td>
+                    <td><%= user.status%></td>
+                    <td><a class="btn btn-outline-danger" href="/deleteDevice/<%=user.id%>" role="button">Usuń</a></td>
+                </tr>
+
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <% } else{ %>
+    <label> Brak uprawnień</label>
+    <% } %>
+</div>
